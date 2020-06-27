@@ -43,7 +43,7 @@ def inlinequery(update, context):
         InlineQueryResultArticle(
             id=rand_food,
             title="Uncle suggest lai",
-            input_message_content=InputTextMessageContent("How about {0}".format(rand_food)))
+            input_message_content=InputTextMessageContent("How about *{0}*?".format(rand_food), parse_mode=ParseMode.MARKDOWN_V2))
         ]
 
     update.inline_query.answer(results, cache_time=5, is_personal=True)

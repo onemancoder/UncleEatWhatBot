@@ -2,6 +2,7 @@
 config.*
 **/.vscode/
 pickle_*
+Pipfile.lock
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

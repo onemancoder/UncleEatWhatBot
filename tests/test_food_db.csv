@@ -1,0 +1,23 @@
+No.,Name of food,Category,Vegetarian,Halal
+1,Humans,Chinese,No,No
+2,Vampire,Malay,No,Yes
+3,Prawn mee,Chinese,No,No
+4,Hokkien mee,Chinese,No,No
+5,Nasi lemak,Malay,No,Yes
+6,Roti prata,Indian,Yes,Yes
+7,Hainanese curry rice,Chinese,No,Yes
+8,Mee goreng,Indian,Yes,Yes
+9,Pizza,Italian,No,No
+10,Tempura,Japanese,No,No
+11,Wanton mee,Chinese,No,No
+12,Udon,Japanese,No,No
+13,Carbonara,Italian,No,No
+14,Fish soup,Chinese,No,No
+15,Soup,Chinese,No,No
+16,Chicken rice,Chinese,No,No
+17,Curry chicken,Chinese,No,No
+18,Laksa,Chinese,No,No
+19,Congee,Chinese,No,No
+20,Chee cheong fun,Chinese,Yes,No
+21,Dim sum,Chinese,No,No
+22,Steamboat,Chinese,No,No

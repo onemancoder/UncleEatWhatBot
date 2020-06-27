@@ -3,6 +3,7 @@ from telegram.ext import (run_async, Updater, CallbackQueryHandler, CommandHandl
 from telegram import (ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ParseMode)
 import logging, os, sys, toml, time, string
 from threading import Thread
+import utils
 
 # Setup logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -21,11 +22,16 @@ def start(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=config["text"]["start"].format(update.message.from_user.first_name))
 
 
-def food_recommendation(update, context):
+def eat_what_leh(update, context):
+    context.bot.send_chat_action(chat_id=update.message.chat_id, action=ChatAction.TYPING)
+    
     username = update.message.from_user.username
     user_id = update.message.from_user.id
 
-    context.bot.send_message(chat_id=update.effective_chat.id, text=config["text"]["food_recommendation"].format(update.message.from_user.first_name))
+    rand_food = utils.food_recommendation(config["file"]["food_db"])
+
+    time.sleep(0.5)
+    context.bot.send_message(chat_id=update.effective_chat.id, text="How about *{0}*?".format(rand_food), parse_mode=ParseMode.MARKDOWN_V2)
 
 def messages(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=config["text"]["unknown_user_input"].format(update.message.from_user.first_name))
@@ -65,7 +71,7 @@ def main():
 
     dp.add_handler(CommandHandler('r', restart, filters=Filters.user(user_id=config["admin"]["bot_admin"])))
     dp.add_handler(CommandHandler('start', start))
-    dp.add_handler(CommandHandler('eat_what_leh', food_recommendation))
+    dp.add_handler(CommandHandler('eat_what_leh', eat_what_leh))
     dp.add_handler(CommandHandler('feedback', feedback))
     dp.add_handler(MessageHandler(Filters.all, messages))
     

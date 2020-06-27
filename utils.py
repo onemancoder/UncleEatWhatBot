@@ -11,5 +11,4 @@ def food_recommendation(csv_path):
 
 class Filter_via_bot(BaseFilter):
     def filter(self, message):
-        if not message.via_bot:
-            return False
+        return not message.via_bot

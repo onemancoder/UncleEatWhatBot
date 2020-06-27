@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
-from telegram.ext import (run_async, Updater, CallbackQueryHandler, CommandHandler, MessageHandler, ConversationHandler, Filters, PicklePersistence)
-from telegram import (ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ParseMode)
+from telegram.ext import (run_async, Updater, CallbackQueryHandler, CommandHandler, MessageHandler, InlineQueryHandler, ConversationHandler, Filters, PicklePersistence)
+from telegram import (ChatAction, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup, ParseMode, InlineQueryResultArticle, InputTextMessageContent)
 import logging, os, sys, toml, time, string
 from threading import Thread
 import utils
+
 
 # Setup logging
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -32,6 +33,20 @@ def eat_what_leh(update, context):
 
     time.sleep(0.5)
     context.bot.send_message(chat_id=update.effective_chat.id, text="How about *{0}*?".format(rand_food), parse_mode=ParseMode.MARKDOWN_V2)
+
+def inlinequery(update, context):
+    """Handle the inline query."""
+    query = update.inline_query.query    
+    rand_food = utils.food_recommendation(config["file"]["food_db"])
+
+    results = [
+        InlineQueryResultArticle(
+            id=rand_food,
+            title="Uncle suggest lai",
+            input_message_content=InputTextMessageContent("How about {0}".format(rand_food)))
+        ]
+
+    update.inline_query.answer(results, cache_time=5, is_personal=True)
 
 def messages(update, context):
     context.bot.send_message(chat_id=update.effective_chat.id, text=config["text"]["unknown_user_input"].format(update.message.from_user.first_name))
@@ -73,7 +88,13 @@ def main():
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(CommandHandler('eat_what_leh', eat_what_leh))
     dp.add_handler(CommandHandler('feedback', feedback))
-    dp.add_handler(MessageHandler(Filters.all, messages))
+
+    # Remember to initialize the class.
+    filter_via_bot = utils.Filter_via_bot()
+    dp.add_handler(MessageHandler(Filters.all & filter_via_bot, messages))
+    
+    # on noncommand i.e message - echo the message on Telegram
+    dp.add_handler(InlineQueryHandler(inlinequery))
     
     # log all errors
     dp.add_error_handler(error)
